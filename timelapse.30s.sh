@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
 # Your time elapsed of this day, month, year and this time you boot your System.
-#
-# by RoachHao (https://github.com/roachsinai)
 
-# https://raw.githubusercontent.com/matryer/bitbar-plugins/master/Time/progress.1h.sh
 # https://gist.github.com/aurorabbit/7fa0e4d76c97a85f7b0a7318f870ce64
 # https://github.com/KittyKatt/screenFetch/blob/master/screenfetch-dev#L1240
 
-width=20
+width=25
 fill_char="▄"
 empty_char="▁"
 
-bitbar="size=14 color=black font='mononoki'"
+bitbar="size=14 color=silver font='mononoki'"
+
+# Add your Birthday here
+# Format: 'YYYY-MM-DD [hh:mm (optional)] [UTC Offset (optional)]'
+BIRTHDAY="1949-10-01 00:00 +08:00"
 
 now=$(date +%s)
 now_F=$(date -d @$now +%F)
@@ -62,24 +63,43 @@ detectuptime () {
     echo $uptime
 }
 
-round() { printf %.0f "$1"; }
+round() { printf %.2f "$1"; }
 
+# repeat the characters using printf
 progress() {
-    filled=$(round "$(echo "$1 * $width / 100" | bc -l)")
+    filled=$(printf %.0f "$(echo "$1 * $width / 100" | bc -l)")
     empty=$((width - filled))
-    # repeat the characters using printf
-    printf "$fill_char%0.s" $(seq "$filled")
+    # filled is 0, also printf one ▄
+    # printf %"$filled"s|tr \  "▄"
+    # could use the statement above repalce the if statement below if the $fill_char is a alphabeta char not ▄
+    # as ▄ will turn to a garbled
+    if (($filled != 0)); then
+        printf "$fill_char%0.s" $(seq "$filled")
+    fi
     printf "$empty_char%0.s" $(seq "$empty")
 }
 
-echo "ღ $(round "$Y_progress")%"
+time_on_earth() {
+    # echo $(date -d $BIRTHDAY +%s)
+    seconds=$(( $now-$(date -d "$BIRTHDAY" +%s) ))
+    minutes=$(( $seconds/60 ))
+    hours=$(( $minutes/60 ))
+    days=$(( $hours/24 ))
+
+    printf "$days days on 🗺️, %sh,   | $bitbar\n" $hours 
+    printf "%smin, %ssec.   | $bitbar" $minutes $seconds
+}
+
+# echo "<font size='1'>ღ $(round "$d_progress")%</font><br><font size='1'>ღ $(round "$d_progress")%</font>"
+# echo "ღ$(round "$d_progress")% | size=16 font=Hack"
+echo "⚡$(round "$d_progress")% | size=16 font=Hack"
 echo ---
 
 # Uptime
 echo "Uptime: $(detectuptime)   | $bitbar"
 
-echo ---
 # day + progress bar
+echo " | $bitbar"
 echo "Day: $(round "$d_progress")%   | $bitbar"
 echo "$(progress "$d_progress")      | $bitbar"
 
@@ -92,3 +112,6 @@ echo "$(progress "$m_progress")        | $bitbar"
 echo " | $bitbar"
 echo "Year: $(round "$Y_progress")%, $(date -d @$now +%j) days.   | $bitbar"
 echo "$(progress "$Y_progress")       | $bitbar"
+
+echo " | $bitbar"
+echo "$(time_on_earth)"
