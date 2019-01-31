@@ -20,7 +20,7 @@ Using Nvidia GPU, such as `optirun python` ![](screenshots/sys_info_with_GPU.png
 
 `optirun` is for `Bumblebee`.
 
-## Chinese Calendar [农历](https://en.wikipedia.org/wiki/Chinese_calendar) 🤔
+## Chinese Calendar [农历](https://en.wikipedia.org/wiki/Chinese_calendar)
 
 在`KDE`面板显示农历。
 
