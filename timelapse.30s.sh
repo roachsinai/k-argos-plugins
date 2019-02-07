@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 # Your time elapsed of this day, month, year and this time you boot your System.
+#
+# by RoachHao (https://github.com/roachsinai)
 
+# https://raw.githubusercontent.com/matryer/bitbar-plugins/master/Time/progress.1h.sh
 # https://gist.github.com/aurorabbit/7fa0e4d76c97a85f7b0a7318f870ce64
 # https://github.com/KittyKatt/screenFetch/blob/master/screenfetch-dev#L1240
 
@@ -9,11 +12,11 @@ width=25
 fill_char="▄"
 empty_char="▁"
 
-bitbar="size=14 color=silver font='mononoki'"
+bitbar="size=14 color=black font='mononoki'"
 
 # Add your Birthday here
 # Format: 'YYYY-MM-DD [hh:mm (optional)] [UTC Offset (optional)]'
-BIRTHDAY="1949-10-01 00:00 +08:00"
+BIRTHDAY="1993-03-18 00:05 +08:00"
 
 now=$(date +%s)
 now_F=$(date -d @$now +%F)
@@ -76,7 +79,9 @@ progress() {
     if (($filled != 0)); then
         printf "$fill_char%0.s" $(seq "$filled")
     fi
-    printf "$empty_char%0.s" $(seq "$empty")
+    if (($empty != 0)); then
+        printf "$empty_char%0.s" $(seq "$empty")
+    fi
 }
 
 time_on_earth() {
@@ -86,13 +91,13 @@ time_on_earth() {
     hours=$(( $minutes/60 ))
     days=$(( $hours/24 ))
 
-    printf "$days days on 🗺️, %sh,   | $bitbar\n" $hours 
+    printf "$days days on 🇨🇳, %sh,   | $bitbar\n" $hours 
     printf "%smin, %ssec.   | $bitbar" $minutes $seconds
 }
 
 # echo "<font size='1'>ღ $(round "$d_progress")%</font><br><font size='1'>ღ $(round "$d_progress")%</font>"
 # echo "ღ$(round "$d_progress")% | size=16 font=Hack"
-echo "⚡$(round "$d_progress")% | size=16 font=Hack"
+echo "⚡$(round "$d_progress")% | size=12 font=Hack color=black"
 echo ---
 
 # Uptime
@@ -104,14 +109,15 @@ echo "Day: $(round "$d_progress")%   | $bitbar"
 echo "$(progress "$d_progress")      | $bitbar"
 
 # month + progress bar
-echo " | $bitbar"
 echo "Month: $(round "$m_progress")%   | $bitbar"
 echo "$(progress "$m_progress")        | $bitbar"
 
 # year + progress bar"
-echo " | $bitbar"
 echo "Year: $(round "$Y_progress")%, $(date -d @$now +%j) days.   | $bitbar"
 echo "$(progress "$Y_progress")       | $bitbar"
 
 echo " | $bitbar"
 echo "$(time_on_earth)"
+
+# echo " | $bitbar"
+# echo "历史上的今天 | href='https://baike.baidu.com/calendar/' size=14"
