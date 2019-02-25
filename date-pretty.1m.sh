@@ -1,48 +1,43 @@
 #!/usr/bin/env bash
 # Firstly, install ccal
 
-declare -A birthdays=(["0101"]="Year's")
-# chinese_cal=$(ccal -u | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" \
-chinese_cal=$(ccal | sed -r "s/ /\&nbsp;/g" | awk 1 ORS="\\\\n" | sed -r "s/\x1B\[7m/<font color=\"blue\">/" \
+year=$(date +%Y)
+declare -A birthdays=(["${year}0102"]="Som")
+chinese_cal=$(ccal -u -g | sed -r "s/ /\&nbsp;/g" | awk 1 ORS="\\\\n" | sed -r "s/\x1B\[7m/<font color=\"blue\">/" \
             | sed -r "s/\x1B\[0m/<\/font>/")
-
-search_string="\]Y"
-search_result=${chinese_cal%$search_string*}
-chinese_month=$(echo $search_result|grep -Eo '[0-9]+$')
-search_string="&nbsp;\["
-first_day_of_this_chinese_month=$(echo ${search_result%$search_string*}|grep -Eo '[0-9]+$')
-search_string="<\/font>"
-chinese_day=$(echo ${chinese_cal%$search_string*}|sed 's/\(.*\)\[//'|grep -Eo '[0-9]+')
-#day=${chinese_cal%$search_string*}
-
-today=$(date +%d)
-if [ "$today" -lt "$first_day_of_this_chinese_month" ]; then
-    ((chinese_month++))
-elif [ "$today" -eq "$first_day_of_this_chinese_month" ]; then
-    chinese_day=1
-fi
-
-printf -v chinese_month "%02d" $chinese_month
-printf -v chinese_day "%02d" $chinese_day
-
-chinese_today="$chinese_month$chinese_day"
 
 declare -A weekdays=(["一"]="Mon" ["二"]="Tue" ["三"]="Wen" ["四"]="Thu" ["五"]="Fri" ["六"]="Sat" ["日"]="Sun")
 weekday=${weekdays[$(date +%a)]}
-if [[ -v birthdays[$chinese_today] ]]; then
-    echo "$(date +"${birthdays[$chinese_today]}🎂,%H:%M") | font=Hack size=14 color=black"
-else
-    if [ ! -z "$weekday" ]; then
-        echo "$(date +"$weekday$today,%H:%M") | font=Hack size=14 color=black"
-    else # Lang == en_US
-        echo "$(date +"%a$today,%H:%M") | font=Hack size=14 color=black"
-    fi
-    # echo "<font size=2 face=Hack color=black>$(date +"$weekday$today&thinsp;%H:%M")</font>"
-fi
+
+source <( python /home/roach/.config/argos/LunarSolarConverter.py ${!birthdays[@]} )
+#eval "$( python /home/roach/.config/argos/LunarSolarConverter.py ${!birthdays[@]} )"
+
+#gap_string=`/home/roach/.config/argos/LunarSolarConverter.py ${!birthdays[@]}`
+#if [ $? -eq 0 ]; then
+#    `$gap_string`
+#else
+#    declare -A gaps
+#fi
+#for lunar in "${!birthdays[@]}"; do
+#    solar=`/home/roach/.config/argos/LunarSolarConverter.py $lunar`
+#    gap=$((($(date +%s --date $solar)-$(date -d 'today 00:00:00' '+%s'))/(3600*24)))
+#    ((gap>=0 && gap<=4)) && gaps["$lunar"]=$gap
+#done
+declare -A gap_numbers=([0]=! [1]=\' [2]=╎ [3]=┆ [4]=┊)
 
 echo ---
 
-bitbar="size=11 color=black font='Hack'"
-echo " | $bitbar"
+bitbar="font=mononoki size=14 color=black dropdown=false"
+if [ "${#gaps[@]}" -ne 0 ]; then
+    for gap in "${!gaps[@]}"; do
+        echo "$(date +"${birthdays[$gap]}🎂${gap_numbers[${gaps[$gap]}]}%H:%M") | $bitbar"
+    done
+elif [ ! -z "$weekday" ]; then
+    echo "$(date +"$weekday%d⸾%H:%M") | $bitbar"
+else # Lang == en_US
+    echo "$(date +"%a%d⸾%H:%M") | $bitbar"
+fi
+
+echo "|size=11 color=black font='Hack'"
 
 echo "$chinese_cal| font='Hack' size=11 color=black"
