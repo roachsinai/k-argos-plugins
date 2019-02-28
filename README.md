@@ -24,7 +24,7 @@ Using Nvidia GPU, such as `optirun python` ![](screenshots/sys_info_with_GPU.png
 
 在`KDE`面板显示农历。
 
-![date-pretty](https://i.imgur.com/fK8kKeZ.png)
+![date-pretty](https://i.imgur.com/tKi0plY.png)
 
 如果今天是节日或节气，会在图片下方一行字的右侧继续显示。
 
