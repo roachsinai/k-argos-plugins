@@ -12,11 +12,12 @@ width=25
 fill_char="▄"
 empty_char="▁"
 
-bitbar="size=14 color=black font='mononoki'"
+bitbar="size=13 color=white font=Hack"
+round() { printf %.2f "$1"; }
 
 # Add your Birthday here
 # Format: 'YYYY-MM-DD [hh:mm (optional)] [UTC Offset (optional)]'
-BIRTHDAY="1993-03-18 00:05 +08:00"
+BIRTHDAY="1949-10-01 00:00 +08:00"
 
 now=$(date +%s)
 now_F=$(date -d @$now +%F)
@@ -27,6 +28,9 @@ d_end=$(date -d "$now_F+1 days" +%s)
 d_progress=$(
     echo "($now - $d_start) * 100 / ($d_end - $d_start)" | bc -l
 )
+
+echo "$(round "$d_progress")%<u></u>&nbsp; | size=14 color=white font=mononoki"
+echo "---"
 
 now_Y=$(date -d @$now +%Y)
 now_m=$(date -d @$now +%m)
@@ -66,8 +70,6 @@ detectuptime () {
     echo $uptime
 }
 
-round() { printf %.2f "$1"; }
-
 # repeat the characters using printf
 progress() {
     filled=$(printf %.0f "$(echo "$1 * $width / 100" | bc -l)")
@@ -91,33 +93,28 @@ time_on_earth() {
     hours=$(( $minutes/60 ))
     days=$(( $hours/24 ))
 
-    printf "$days days on 🇨🇳, %sh,   | $bitbar\n" $hours 
+    printf "$days days on 🇨🇳, %sh,   | $bitbar\n" $hours
     printf "%smin, %ssec.   | $bitbar" $minutes $seconds
 }
 
-# echo "<font size='1'>ღ $(round "$d_progress")%</font><br><font size='1'>ღ $(round "$d_progress")%</font>"
-# echo "ღ$(round "$d_progress")% | size=16 font=Hack"
-echo "⚡$(round "$d_progress")% | size=12 font=Hack color=black"
-echo ---
-
 # Uptime
 echo "Uptime: $(detectuptime)   | $bitbar"
-
-# day + progress bar
-echo " | $bitbar"
-echo "Day: $(round "$d_progress")%   | $bitbar"
-echo "$(progress "$d_progress")      | $bitbar"
-
-# month + progress bar
-echo "Month: $(round "$m_progress")%   | $bitbar"
-echo "$(progress "$m_progress")        | $bitbar"
 
 # year + progress bar"
 echo "Year: $(round "$Y_progress")%, $(date -d @$now +%j) days.   | $bitbar"
 echo "$(progress "$Y_progress")       | $bitbar"
 
-echo " | $bitbar"
+# month + progress bar
+echo "Month: $(round "$m_progress")%   | $bitbar"
+echo "$(progress "$m_progress")        | $bitbar"
+
+# day + progress bar
+echo "| size=6 font=Hack"
+echo "Day: $(round "$d_progress")%   | $bitbar"
+echo "$(progress "$d_progress")      | $bitbar"
+
+echo "| size=6 font=Hack"
 echo "$(time_on_earth)"
 
-# echo " | $bitbar"
-# echo "历史上的今天 | href='https://baike.baidu.com/calendar/' size=14"
+echo "| size=6 font=Hack"
+echo "历史上的今天| href=https://baike.baidu.com/calendar size=14 color=white font=Hack"
