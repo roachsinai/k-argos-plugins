@@ -2,6 +2,7 @@
 # Your time elapsed of this day, month, year and this time you boot your System.
 #
 # by RoachHao (https://github.com/roachsinai)
+# based on https://getbitbar.com/plugins/Time/progress.1h.sh
 #
 # python-uptime is needed
 
