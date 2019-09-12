@@ -43,7 +43,7 @@ def pstatus_bar():
         for idx, solar_date in enumerate(solar2fest[month]):
             gap = (solar_date - today_date).days
             if 0 <= gap <= 4:
-                print(f"{festivals[month][idx]}🎆{gap_numbers[gap]}{today.hour:02d}:{today.minute:02d}{bitbar}")
+                print(f"{festivals[month][idx]}🍰{gap_numbers[gap]}{today.hour:02d}:{today.minute:02d}{bitbar}")
                 if not is_important:
                     is_important = True
 
