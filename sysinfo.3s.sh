@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-#script is based on: https://raw.githubusercontent.com/matryer/bitbar-plugins/master/Network/bandwidth.1s.sh
+#based on: https://github.com/kotelnik/plasma-applet-thermal-monitor: ui/config/ConfigTemperatures.qml
 
-#Do this first:
-#sudo -S lm-sensors
-#sudo sensors-detect
+#Do this first if you use archlinux-like distros:
+#   sudo pacman -S lm_sensors
+#   sudo sensors-detect
 
 bitbar="|font=iosevka size=14 color=white"
 temp=$(sensors | grep -oP 'Package.*?\+\K[0-9.]+')
