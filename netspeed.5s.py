@@ -3,10 +3,14 @@ import psutil
 import time
 import os
 
-count = psutil.net_io_counters()
+TIME = 3
+
+# https://blog.csdn.net/m0_60853118/article/details/133827639
+# https://blog.csdn.net/Soul_Programmer_Swh/article/details/132183326
+count = psutil.net_io_counters(pernic=True)["en0"]
 recv, sent = count.bytes_recv, count.bytes_sent
-time.sleep(1)
-count = psutil.net_io_counters()
+time.sleep(TIME)
+count = psutil.net_io_counters(pernic=True)["en0"]
 recv, sent = count.bytes_recv - recv, count.bytes_sent - sent
 
 stats = psutil.net_if_stats()
@@ -30,12 +34,12 @@ def size(bytes, high, medium):
     return "%4d%s" % (bytes, suffix)
 
 print('↑↓ %s' %
-      (size(max(sent, recv), 8000000, 1000000).replace("_"," ") )  )
- 
- 
+      (size(max(sent, recv) / TIME, 8000000, 1000000).replace("_"," ") )  )
+
+
 # print ("---")
-# 
+#
 # out = os.popen("sudo nethogs -t -c 2 | tail -n +9").read()
-# 
+#
 # print("PROCESS\tSENT\tRECEIVED")
 # print( '%s' % out.replace('\n',"<br>") )
