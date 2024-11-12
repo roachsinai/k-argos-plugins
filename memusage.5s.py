@@ -1,4 +1,4 @@
-#!/Users/tal/.venv/util/bin/python3
+#!/Users/tal/.pyenv/versions/xbar/bin/python3
 # https://apple.stackexchange.com/a/271222
 
 # Copyright (c) 2009, Giampaolo Rodola'. All rights reserved.

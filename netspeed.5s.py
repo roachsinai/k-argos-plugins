@@ -1,4 +1,4 @@
-#!/Users/tal/.venv/util/bin/python3
+#!/Users/tal/.pyenv/versions/xbar/bin/python3
 import psutil
 import time
 import os
