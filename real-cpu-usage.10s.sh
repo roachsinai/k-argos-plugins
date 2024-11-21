@@ -42,7 +42,7 @@ np.set_printoptions(suppress=True);np.set_printoptions\(suppress=True\)
 tmux mouse 2.1; tmux set -g mouse on
 cmake; cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 docker remove cache; "rm -r /root/.cache/pip && rm -rf /var/lib/apt/lists/*"
-strace open; strace -e trace=open,openat binary_file args 2>deps.txt
+strace open; "strace -e trace=open,openat binary_file args 2>deps.txt"
 '
 # vscode settings.json 位置;/Users/tal/Library/Application\\\ Support/Code/User/settings.json
 # vscode keybindings.json 位置;/Users/tal/Library/Application\\\ Support/Code/User/keybindings.json
