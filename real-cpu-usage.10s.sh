@@ -63,7 +63,7 @@ done <<< "$COPY_LIST"
 
 COPY_LIST='
 10.202.0.54:3128
-10.8.24.50:7890
+10.8.24.50:7880
 10.202.196.9:3128
 10.202.1.3:18000
 '
@@ -71,20 +71,20 @@ echo "---"
 echo "bash proxy"
 while read -r line; do
   if ! [ "$line" == "" ]; then
-    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e export http_proxy=http://$line \&\& export https_proxy=http://$line | $HEAD -c -1 | pbcopy' terminal=false"
+    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in {http,https,ftp,all}_proxy; do export \\\$item=http://$line; done\" | $HEAD -c -1 | pbcopy' terminal=false"
   fi
 done <<< "$COPY_LIST"
-echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e export http_proxy="\""\\"\"""\"""\""\\"\"""\"" \&\& export https_proxy="\""\\"\"""\"""\""\\"\"""\"" | $HEAD -c -1 | pbcopy' terminal=false"
+echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in {http,https,ftp,all}_proxy; do export \\\$item="\""\\"\"""\"""\""\\"\"""\""; done\" | $HEAD -c -1 | pbcopy' terminal=false"
 
 echo "fish proxy"
 while read -r line; do
   if ! [ "$line" == "" ]; then
-    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e x http_proxy http://$line \&\& x https_proxy http://$line | $HEAD -c -1 | pbcopy' terminal=false"
+    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in http_proxy https_proxy ftp_proxy all_proxy; set -gx \\\$item http://$line; end\" | $HEAD -c -1 | pbcopy' terminal=false"
   fi
 done <<< "$COPY_LIST"
 # "\""\\"\"""\"" gets "
 # "\"" gets " in normal shell
-echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e x http_proxy "\""\\"\"""\"""\""\\"\"""\"" \&\& x https_proxy "\""\\"\"""\"""\""\\"\"""\"" | $HEAD -c -1 | pbcopy' terminal=false"
+echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in http_proxy https_proxy ftp_proxy all_proxy; set -gx \\\$item "\""\\"\"""\"""\""\\"\"""\""; end\" | $HEAD -c -1 | pbcopy' terminal=false"
 
 LIST="
 command + \`           : 在当前桌面的同一个 App 的不同窗口切换
