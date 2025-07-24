@@ -50,12 +50,26 @@ echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in {htt
 echo "fish proxy"
 while read -r line; do
   if ! [ "$line" == "" ]; then
-    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in http_proxy https_proxy ftp_proxy all_proxy; set -gx \\\$item http://$line; end\" | $HEAD -c -1 | pbcopy' terminal=false"
+    echo "--$line | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in {http,https,ftp,all}_proxy; set -gx \\\$item http://$line; end\" | $HEAD -c -1 | pbcopy' terminal=false"
   fi
 done <<< "$COPY_LIST"
 # "\""\\"\"""\"" gets "
 # "\"" gets " in normal shell
-echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in http_proxy https_proxy ftp_proxy all_proxy; set -gx \\\$item "\""\\"\"""\"""\""\\"\"""\""; end\" | $HEAD -c -1 | pbcopy' terminal=false"
+echo "--reset | bash='/bin/bash' param1='-c' param2='$ECHO -e \"for item in {http,https,ftp,all}_proxy; set -gx \\\$item "\""\\"\"""\"""\""\\"\"""\""; end\" | $HEAD -c -1 | pbcopy' terminal=false"
+
+COPY_LIST="
+set Release mode; cmake -DCMAKE_BUILD_TYPE=Release ..
+set RelWithDebInfo mode; cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+grep compile mode;grep CMAKE_BUILD_TYPE CMakeCache.txt
+"
+echo "cmake"
+while read -r line; do
+  if ! [ "$line" == "" ]; then
+    to_show=$(echo $line | cut -d ";" -f 1)
+    to_copy=$(echo $line | cut -d ";" -f 2)
+    echo "--$to_show | bash='/bin/bash' param1='-c' param2='$ECHO -e $to_copy | $HEAD -c -1 | pbcopy' terminal=false"
+  fi
+done <<< "$COPY_LIST"
 
 # /Users/tal/office/android/DINet/app/src/main/cpp;/Users/tal/office/android/DINet/app/src/main/cpp
 # /Users/tal/office/ios/dinet_project/DINet/DINet;/Users/tal/office/ios/dinet_project/DINet/DINet
@@ -64,8 +78,6 @@ COPY_LIST="
 set fish shell; echo $FISH_CONTENT \| base64 -d \| gunzip \| bash
 np.set_printoptions(suppress=True);np.set_printoptions\(suppress=True\)
 tmux mouse 2.1; tmux set -g mouse on
-cmake set compile mode; cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake grep compile mode;grep CMAKE_BUILD_TYPE CMakeCache.txt
 docker remove cache; \"rm -r /root/.cache/pip && rm -rf /var/lib/apt/lists/*\"
 strace open; \"strace -e trace=open,openat binary_file args 2>deps.txt\"
 get container ID; \"basename \\\$(cat /proc/1/cpuset) | head -c 12 | c\"
