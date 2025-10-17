@@ -32,11 +32,12 @@ ECHO=/opt/homebrew/opt/coreutils/libexec/gnubin/echo
 # Max OS /bin/head not support option -c -1
 HEAD=/opt/homebrew/opt/coreutils/libexec/gnubin/head
 
+# Get local IP address dynamically
+LOCAL_IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1)
+
 COPY_LIST='
-10.202.0.54:3128
-10.8.24.50:7880
-10.202.196.9:3128
-10.202.1.3:18000
+'"$LOCAL_IP"':7880
+10.198.7.60:7890
 '
 echo "---"
 echo "bash proxy"
